@@ -9,4 +9,4 @@ open:
       units: metric
       lang: en
 server:
-    port: 8081
+    port: 8080

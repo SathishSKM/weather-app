@@ -8,5 +8,5 @@ RUN mvn clean package -DskipTests -s /root/.m2/settings.xml
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 COPY --from=build /app/target/*.jar weather-app.jar
-EXPOSE 8081
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "weather-app.jar"]
