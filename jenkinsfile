@@ -8,19 +8,24 @@ pipeline {
     }
 
     stages {
+        stage('Checkout Code') {
+                    steps {
+                        git url: 'https://github.com/SathishSKM/weather-app.git', branch: 'main'
+                    }
+                }
         stage('Build Maven Project') {
             steps {
-                sh 'mvn clean package -DskipTests'
+                bat 'mvn clean package -DskipTests'
             }
         }
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${IMAGE_NAME} ."
+                bat "docker build -t ${IMAGE_NAME} ."
             }
         }
         stage('Stop & Remove Old Container') {
             steps {
-                sh """
+                bat """
                     docker stop ${CONTAINER_NAME} || true
                     docker rm ${CONTAINER_NAME} || true
                 """
@@ -28,7 +33,7 @@ pipeline {
         }
         stage('Run Docker Container') {
             steps {
-                sh "docker run -d --name ${CONTAINER_NAME} -p ${APP_PORT}:${APP_PORT} ${IMAGE_NAME}"
+                bat "docker run -d --name ${CONTAINER_NAME} -p ${APP_PORT}:${APP_PORT} ${IMAGE_NAME}"
             }
         }
     }
