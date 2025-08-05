@@ -1,6 +1,9 @@
 package com.weather.cache;
 
 import com.weather.dto.WeatherResponseDTO;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import java.time.Duration;
@@ -10,23 +13,17 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Component
+@Slf4j
 public class WeatherCache {
 
-    private final Map<String, WeatherResponseDTO> cache = new ConcurrentHashMap<>();
-    private final Map<String, LocalDateTime> lastUpdated = new ConcurrentHashMap<>();
-    private static final Duration CACHE_DURATION = Duration.ofHours(1);
-
-    public Optional<WeatherResponseDTO> getCachedForecast(String city) {
-        if (cache.containsKey(city) &&
-                lastUpdated.containsKey(city) &&
-                lastUpdated.get(city).plus(CACHE_DURATION).isAfter(LocalDateTime.now())) {
-            return Optional.of(cache.get(city));
-        }
-        return Optional.empty();
+    @Cacheable(value = "weather", key = "#city")
+    public WeatherResponseDTO getCachedForecast(String city) {
+        log.info("Cached weather data not found for city: {}", city);
+        return null;
     }
 
-    public void cacheForecast(String city, WeatherResponseDTO forecast) {
-        cache.put(city, forecast);
-        lastUpdated.put(city, LocalDateTime.now());
+    @CachePut(value = "weather", key = "#city")
+    public WeatherResponseDTO cacheForecast(String city, WeatherResponseDTO forecast) {
+        return forecast;
     }
 }

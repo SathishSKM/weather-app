@@ -1,6 +1,8 @@
 spring:
   application:
     name: weather
+  cache:
+    type: simple
 open:
   weather:
     api:
