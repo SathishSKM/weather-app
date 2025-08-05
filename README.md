@@ -16,6 +16,66 @@ This microservice provides a 3-day weather forecast for any city, showing daily 
 3. [x] Supports offline fallback using cached weather data.
 4. [x] Designed for extensibility, new alert conditions can be added with minimal code and without requiring major redeployments.
 
+### **System Architecture Overview**
+
+The application follows a client-server architecture with:
+
+* **Frontend:** React.js (Single-Page Application)
+
+* **Backend:** Java and Spring Boot (REST API)
+
+* **Data Source:** OpenWeatherMap API (External)
+
+![img_1.png](img_1.png)
+
+### **Implementation Approach**
+
+1. **REST API Design**
+
+    Endpoint: GET /api/weather/forecast?city={city}&offlineMode={boolean}
+    
+    Response:
+    
+    json
+    {
+    "city": "London",
+    "forecasts": [
+    {
+    "date": "2023-10-20",
+    "maxTemp": 22.5,
+    "minTemp": 15.3,
+    "alerts": ["Carry umbrella"]
+    }
+    ]
+    }   
+
+2. **Caching Strategy**
+
+    Cache Key: City name
+    
+    Eviction Policy: Time-based (1 hour)
+
+    java
+    @Cacheable(value = "forecasts", key = "#city")
+    public WeatherResponse getForecast(String city) { ... }
+
+3. **Error Handling**
+
+    * Custom exceptions (WeatherApiException, ValidationException)
+
+    * HTTP Status Codes:
+
+          400 (Bad Request) for invalid inputs
+          404 (Not Found) if city not found
+          500 (Internal Server Error) for unexpected errors
+          503 (Service Unavailable) if OpenWeatherMap API fails
+
+4. **Offline Mode**
+
+    Returns cached data when offlineMode=true
+    
+    Falls back to cached data if API fails
+
 ### **Sequence Diagram**
 
 ![img.png](img.png)
