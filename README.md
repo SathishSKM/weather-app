@@ -26,6 +26,10 @@ The application follows a client-server architecture with:
 
 * **Data Source:** OpenWeatherMap API (External)
 
+* **API Documentation:** Swagger/OpenAPI
+
+* **Security:** Spring basic security for API access
+
 ![img_1.png](img_1.png)
 
 ### **Implementation Approach**

@@ -3,6 +3,10 @@ spring:
     name: weather
   cache:
     type: simple
+  security:
+    user:
+      name: user
+      password: password
 open:
   weather:
     api:
