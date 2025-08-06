@@ -1,5 +1,6 @@
 package com.weather.client;
 
+import com.weather.cache.WeatherCache;
 import com.weather.dto.openweathermap.OpenWeatherMapResponseDTO;
 import com.weather.exception.BadRequestException;
 import com.weather.exception.ResourceNotFoundException;
@@ -29,9 +30,12 @@ public class OpenWeatherMapClient {
 
     private final RestTemplate restTemplate;
 
+    private final WeatherCache weatherCache;
+
     @Autowired
-    public OpenWeatherMapClient(RestTemplateBuilder restTemplateBuilder) {
+    public OpenWeatherMapClient(RestTemplateBuilder restTemplateBuilder, WeatherCache weatherCache) {
         this.restTemplate = restTemplateBuilder.build();
+        this.weatherCache = weatherCache;
     }
 
     @CircuitBreaker(name = "weather-client", fallbackMethod = "getForecastFallback")
@@ -47,6 +51,7 @@ public class OpenWeatherMapClient {
                 if(!"200".equals(response.getBody().getCode())){
                     throw new WeatherApiException("API returned error code: " + response.getBody().getCode());
                 }
+                weatherCache.cacheOpenForecast(city, response.getBody());
                 return response.getBody();
             }
             throw new WeatherApiException("Failed to fetch weather data");

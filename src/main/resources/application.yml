@@ -31,8 +31,7 @@ spring:
           permittedNumberOfCallsInHalfOpenState: 3
           minimumNumberOfCalls: 5
           slidingWindowType: COUNT_BASED
-          slidingWindowSize: 10
-          eventConsumerBufferSize: 10
+          slidingWindowSize: 5
           registerHealthIndicator: true
 ---
 

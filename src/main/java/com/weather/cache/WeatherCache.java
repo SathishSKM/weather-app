@@ -1,6 +1,7 @@
 package com.weather.cache;
 
 import com.weather.dto.WeatherResponseDTO;
+import com.weather.dto.openweathermap.OpenWeatherMapResponseDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -36,4 +37,5 @@ public class WeatherCache {
     @CachePut(value = "openweather", key = "#city")
     public OpenWeatherMapResponseDTO cacheOpenForecast(String city, OpenWeatherMapResponseDTO forecast) {
         return forecast;
+    }
 }
