@@ -1,9 +1,11 @@
 package com.weather.exception;
 
 import jakarta.validation.ConstraintViolationException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -12,6 +14,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.util.stream.Collectors;
 
 @ControllerAdvice
+@Slf4j
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(WeatherAppException.class)
@@ -52,11 +55,19 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleAllExceptions(Exception ex, WebRequest request) {
+        log.error(ex.getMessage());
         WeatherAppException weatherEx = new WeatherAppException(
                 "INTERNAL_ERROR",
                 "An unexpected error occurred: " + ex.getMessage(),
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
+        ErrorResponse errorResponse = new ErrorResponse(weatherEx, request.getDescription(false));
+        return new ResponseEntity<>(errorResponse, weatherEx.getHttpStatus());
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ErrorResponse> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex, WebRequest request) {
+        WeatherAppException weatherEx = new BadRequestException(ex.getMessage());
         ErrorResponse errorResponse = new ErrorResponse(weatherEx, request.getDescription(false));
         return new ResponseEntity<>(errorResponse, weatherEx.getHttpStatus());
     }
