@@ -1,6 +1,7 @@
 package com.weather.exception;
 
 import lombok.Getter;
+
 import java.time.LocalDateTime;
 
 @Getter

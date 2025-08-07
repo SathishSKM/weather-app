@@ -14,7 +14,7 @@ public class DailyForecast {
 
     public DailyForecast(LocalDate date, double maxTemp, double minTemp, List<String> alerts) {
         this.date = date;
-        this.maxTemp = Math.round(maxTemp * 10) / 10.0; // Round to 1 decimal place
+        this.maxTemp = Math.round(maxTemp * 10) / 10.0;
         this.minTemp = Math.round(minTemp * 10) / 10.0;
         this.alerts = alerts;
     }

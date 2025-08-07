@@ -11,7 +11,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @Slf4j
@@ -26,10 +25,11 @@ public class SecurityConfig {
                         auth
                                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
                                 .requestMatchers(
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/swagger-resources/**").permitAll().anyRequest().authenticated())
-                .httpBasic(httpBasic -> httpBasic.init(http));;
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**",
+                                        "/swagger-resources/**").permitAll().anyRequest().authenticated())
+                .httpBasic(httpBasic -> httpBasic.init(http));
+        ;
 
         return http.build();
     }

@@ -1,8 +1,10 @@
 # weather-app
 ----------
+
 ### **Weather Forecast**
 
-This microservice provides a 3-day weather forecast for any city, showing daily high and low temperatures. It also adds contextual alerts based on weather conditions:
+This microservice provides a 3-day weather forecast for any city, showing daily high and low temperatures. It also adds
+contextual alerts based on weather conditions:
 
 1. [x] Carry umbrella if rain is predicted
 2. [x] Use sunscreen lotion if temperature exceeds 40°C
@@ -14,7 +16,8 @@ This microservice provides a 3-day weather forecast for any city, showing daily 
 1. [x] Accepts city and optional offlineMode as input parameters.
 2. [x] Returns a clean summary of the next 3 days with necessary alerts.
 3. [x] Supports offline fallback using cached weather data.
-4. [x] Designed for extensibility, new alert conditions can be added with minimal code and without requiring major redeployments.
+4. [x] Designed for extensibility, new alert conditions can be added with minimal code and without requiring major
+   redeployments.
 
 ### **System Architecture Overview**
 
@@ -36,32 +39,32 @@ The application follows a client-server architecture with:
 
 1. **REST API Design**
 
-    Endpoint: GET /api/weather/forecast?city={city}&offlineMode={boolean}
-    
-    Response:
-    
-    json
-    {
-    "city": "London",
-    "forecasts": [
-    {
-    "date": "2023-10-20",
-    "maxTemp": 22.5,
-    "minTemp": 15.3,
-    "alerts": ["Carry umbrella"]
-    }
-    ]
-    }   
+   Endpoint: GET /api/weather/forecast?city={city}&offlineMode={boolean}
+
+   Response:
+
+   json
+   {
+   "city": "London",
+   "forecasts": [
+   {
+   "date": "2023-10-20",
+   "maxTemp": 22.5,
+   "minTemp": 15.3,
+   "alerts": ["Carry umbrella"]
+   }
+   ]
+   }
 
 2. **Caching Strategy**
 
-    Cache Key: City name
-    
-    Eviction Policy: Time-based (1 hour)
+   Cache Key: City name
 
-    java
-    @Cacheable(value = "forecasts", key = "#city")
-    public WeatherResponse getForecast(String city) { ... }
+   Eviction Policy: Time-based (1 hour)
+
+   java
+   @Cacheable(value = "forecasts", key = "#city")
+   public WeatherResponse getForecast(String city) { ... }
 
 3. **Error Handling**
 
@@ -76,9 +79,9 @@ The application follows a client-server architecture with:
 
 4. **Offline Mode**
 
-    Returns cached data when offlineMode=true
-    
-    Falls back to cached data if API fails
+   Returns cached data when offlineMode=true
+
+   Falls back to cached data if API fails
 
 ### **Sequence Diagram**
 
@@ -92,7 +95,7 @@ The application follows a client-server architecture with:
 * **Singleton Pattern:** Spring components are singletons by default
 * **Factory Pattern:** Used in creating different types of responses based on conditions
 
-### **Production Readiness** 
+### **Production Readiness**
 
 * **Externalized Configuration:** API keys and URLs in properties files
 * **Health Checks:** Spring Boot Actuator endpoints

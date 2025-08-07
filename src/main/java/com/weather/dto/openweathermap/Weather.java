@@ -1,8 +1,6 @@
 package com.weather.dto.openweathermap;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class Weather {

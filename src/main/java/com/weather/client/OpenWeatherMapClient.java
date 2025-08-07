@@ -22,15 +22,12 @@ import org.springframework.web.client.RestTemplate;
 @Component
 public class OpenWeatherMapClient {
 
+    private final RestTemplate restTemplate;
+    private final WeatherCache weatherCache;
     @Value("${open.weather.api.key}")
     private String apiKey;
-
     @Value("${open.weather.api.url}")
     private String apiUrl;
-
-    private final RestTemplate restTemplate;
-
-    private final WeatherCache weatherCache;
 
     @Autowired
     public OpenWeatherMapClient(RestTemplateBuilder restTemplateBuilder, WeatherCache weatherCache) {
@@ -48,7 +45,7 @@ public class OpenWeatherMapClient {
                     url, OpenWeatherMapResponseDTO.class);
 
             if (response.getStatusCode().is2xxSuccessful() && response.getBody() != null) {
-                if(!"200".equals(response.getBody().getCode())){
+                if (!"200".equals(response.getBody().getCode())) {
                     throw new WeatherApiException("API returned error code: " + response.getBody().getCode());
                 }
                 weatherCache.cacheOpenForecast(city, response.getBody());
@@ -71,7 +68,7 @@ public class OpenWeatherMapClient {
         }
     }
 
-     public OpenWeatherMapResponseDTO getForecastFallback(String city, Throwable t) {
+    public OpenWeatherMapResponseDTO getForecastFallback(String city, Throwable t) {
         log.error("Fallback triggered for city '{}': {}", city, t.getMessage());
         return weatherCache.getCachedOpenForecast(city);
     }
