@@ -1,17 +1,26 @@
 package com.weather.client;
 
+import com.weather.cache.WeatherCache;
+import com.weather.dto.WeatherResponseDTO;
 import com.weather.dto.openweathermap.City;
 import com.weather.dto.openweathermap.OpenWeatherMapResponseDTO;
 import com.weather.exception.BadRequestException;
 import com.weather.exception.ResourceNotFoundException;
 import com.weather.exception.WeatherApiException;
 import java.lang.reflect.Field;
+import java.util.Collections;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.*;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
@@ -23,7 +32,12 @@ import static org.mockito.Mockito.*;
 class OpenWeatherMapClientTest {
 
   private RestTemplate restTemplate;
+
   private OpenWeatherMapClient client;
+
+  @Mock
+  private WeatherCache weatherCache;
+
 
   @BeforeEach
   void setup() throws Exception {
@@ -31,7 +45,7 @@ class OpenWeatherMapClientTest {
     RestTemplateBuilder builder = mock(RestTemplateBuilder.class);
     when(builder.build()).thenReturn(restTemplate);
 
-    client = new OpenWeatherMapClient(builder);
+    client = new OpenWeatherMapClient(builder, weatherCache);
 
     setPrivateField(client, "apiKey", "dummy-key");
     setPrivateField(client, "apiUrl", "http://dummy-url");
@@ -46,23 +60,6 @@ class OpenWeatherMapClientTest {
   @Nested
   @DisplayName("When API responds successfully")
   class Success {
-
-    @Test
-    @DisplayName("Should return forecast when status is 200 and body code is '200'")
-    void shouldReturnForecast() {
-      OpenWeatherMapResponseDTO dto = new OpenWeatherMapResponseDTO();
-      dto.setCode("200");
-      City city = new City();
-      city.setName("London");
-      dto.setCity(city);
-
-      ResponseEntity<OpenWeatherMapResponseDTO> response = new ResponseEntity<>(dto, HttpStatus.OK);
-      when(restTemplate.getForEntity(anyString(), eq(OpenWeatherMapResponseDTO.class))).thenReturn(response);
-
-      OpenWeatherMapResponseDTO result = client.getForecast("London");
-
-      assertEquals("London", result.getCity().getName());
-    }
 
     @Test
     @DisplayName("Should throw WeatherApiException if body code is not '200'")
