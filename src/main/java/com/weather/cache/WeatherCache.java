@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class WeatherCache {
 
-    @Cacheable(value = "weather", key = "#city")
+    @Cacheable(value = "weather", key = "#city", unless = "#result == null")
     public WeatherResponseDTO getCachedForecast(String city) {
         log.info("Cached weather data not found for city: {}", city);
         return null;
@@ -22,7 +22,7 @@ public class WeatherCache {
         return forecast;
     }
 
-    @Cacheable(value = "openweather", key = "#city")
+    @Cacheable(value = "openweather", key = "#city", unless = "#result == null")
     public OpenWeatherMapResponseDTO getCachedOpenForecast(String city) {
         log.info("Cached weather data not found for city: {}", city);
         return null;

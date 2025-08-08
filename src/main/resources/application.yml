@@ -4,7 +4,18 @@ spring:
   server:
     port: 8081
   cache:
-    type: simple
+    type: redis
+    redis:
+      time-to-live: 30m
+      key-prefix: weather_
+      cache-null-values: false
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 5000ms
   security:
     user:
       name: user

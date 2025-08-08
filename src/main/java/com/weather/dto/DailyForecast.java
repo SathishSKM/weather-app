@@ -2,11 +2,12 @@ package com.weather.dto;
 
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class DailyForecast {
+public class DailyForecast implements Serializable {
     private LocalDate date;
     private double maxTemp;
     private double minTemp;

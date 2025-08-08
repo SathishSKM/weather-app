@@ -49,6 +49,7 @@ public class WeatherService {
             log.info("Weather data processed and cached for city: {}", city);
             return processedWeatherResponse;
         } catch (Exception ex) {
+            ex.printStackTrace();
             WeatherResponseDTO cachedForecast = weatherCache.getCachedForecast(city);
             log.error("Error fetching weather data for city: {}, error: {}", city, ex.getMessage());
             if (cachedForecast != null) {

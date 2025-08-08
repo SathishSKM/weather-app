@@ -3,8 +3,10 @@ package com.weather.dto.openweathermap;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class Main {
+public class Main implements Serializable {
     private double temp;
     @JsonProperty("feels_like")
     private double feelsLike;
