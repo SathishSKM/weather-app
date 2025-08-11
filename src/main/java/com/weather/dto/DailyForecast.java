@@ -8,9 +8,13 @@ import java.util.List;
 
 @Data
 public class DailyForecast implements Serializable {
+
     private LocalDate date;
+
     private double maxTemp;
+
     private double minTemp;
+
     private List<String> alerts;
 
     public DailyForecast(LocalDate date, double maxTemp, double minTemp, List<String> alerts) {

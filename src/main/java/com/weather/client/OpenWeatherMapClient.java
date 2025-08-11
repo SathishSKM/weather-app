@@ -5,6 +5,7 @@ import com.weather.dto.openweathermap.OpenWeatherMapResponseDTO;
 import com.weather.exception.BadRequestException;
 import com.weather.exception.ResourceNotFoundException;
 import com.weather.exception.WeatherApiException;
+import io.github.resilience4j.bulkhead.annotation.Bulkhead;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,12 @@ import org.springframework.web.client.RestTemplate;
 public class OpenWeatherMapClient {
 
     private final RestTemplate restTemplate;
+
     private final WeatherCache weatherCache;
+
     @Value("${open.weather.api.key}")
     private String apiKey;
+
     @Value("${open.weather.api.url}")
     private String apiUrl;
 
@@ -36,6 +40,7 @@ public class OpenWeatherMapClient {
     }
 
     @CircuitBreaker(name = "weather-client", fallbackMethod = "getForecastFallback")
+    @Bulkhead(name ="weather-client", type = Bulkhead.Type.SEMAPHORE)
     public OpenWeatherMapResponseDTO getForecast(String city) {
         String url = String.format("%s?q=%s&appid=%s&cnt=20", apiUrl, city, apiKey);
 

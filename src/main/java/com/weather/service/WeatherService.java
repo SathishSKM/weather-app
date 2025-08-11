@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 public class WeatherService {
 
     private final OpenWeatherMapClient openWeatherMapClient;
+
     private final WeatherCache weatherCache;
 
     @Autowired
@@ -49,7 +50,6 @@ public class WeatherService {
             log.info("Weather data processed and cached for city: {}", city);
             return processedWeatherResponse;
         } catch (Exception ex) {
-            ex.printStackTrace();
             WeatherResponseDTO cachedForecast = weatherCache.getCachedForecast(city);
             log.error("Error fetching weather data for city: {}, error: {}", city, ex.getMessage());
             if (cachedForecast != null) {
@@ -103,10 +103,18 @@ public class WeatherService {
                 .orElse(0);
 
         List<String> alerts = new ArrayList<>();
-        if (hasRain) alerts.add("Carry umbrella");
-        if (maxTemp > 40) alerts.add("Use sunscreen lotion");
-        if (maxWind > 10) alerts.add("It's too windy, watch out!");
-        if (hasThunderstorm) alerts.add("Don't step out! A Storm is brewing!");
+        if (hasRain) {
+            alerts.add("Carry umbrella");
+        }
+        if (maxTemp > 40) {
+            alerts.add("Use sunscreen lotion");
+        }
+        if (maxWind > 10) {
+            alerts.add("It's too windy, watch out!");
+        }
+        if (hasThunderstorm) {
+            alerts.add("Don't step out! A Storm is brewing!");
+        }
 
         double maxTempCelsius = maxTemp - 273.15;
         double minTempCelsius = minTemp - 273.15;

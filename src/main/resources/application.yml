@@ -44,6 +44,11 @@ spring:
           slidingWindowType: COUNT_BASED
           slidingWindowSize: 5
           registerHealthIndicator: true
+    bulkhead:
+      instances:
+        weather-client:
+          maxConcurrentCalls: 5
+          maxWaitDuration: 500ms
 ---
 
 spring:
