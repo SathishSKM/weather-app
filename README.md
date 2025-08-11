@@ -91,7 +91,7 @@ The application follows a client-server architecture with:
 
 * **Singleton Pattern:** Spring components are singletons by default
 * **Facade Pattern:** WeatherApiClient acts as a facade to the external weather API
-* **Decorator Pattern:** Used in processing weather data by adding alerts to the forecast
+* **Proxy Pattern:** Used spring authentication before reaching to controller
 * **Circuit Breaker Pattern:** Implemented using Resilience4j to handle API failures gracefully
 * **Bulkhead Pattern:** Used to limit the concurrent calls to client API
 
